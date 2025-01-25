@@ -27,7 +27,6 @@ public class AuthServiceImpl implements AuthService {
 	private final RoleRepository roleRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
-	private final JwtEncoder jwtEncoder;
 	private final TokenService tokenService;
 	@Autowired
 	public AuthServiceImpl(
@@ -35,12 +34,11 @@ public class AuthServiceImpl implements AuthService {
 			RoleRepository roleRepository,
 			PasswordEncoder passwordEncoder,
 			AuthenticationManager authenticationManager,
-			JwtEncoder jwtEncoder, TokenService tokenService) {
+			TokenService tokenService) {
 		this.appUserRepository = appUserRepository;
 		this.roleRepository = roleRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.authenticationManager = authenticationManager;
-		this.jwtEncoder = jwtEncoder;
 		this.tokenService = tokenService;
 	}
 	
