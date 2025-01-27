@@ -1,4 +1,4 @@
-package org.example.medsys.service;
+package org.example.medsys.service.medical;
 
 import org.example.medsys.dto.VisitDto;
 import org.example.medsys.entity.medical.Patient;
@@ -44,7 +44,7 @@ public class VisitServiceImpl implements VisitService{
 		
 		return new VisitDto(
 				visit.getId(),
-				visit.getDate(),
+				visit.getDateTime(),
 				visit.getDoctor() != null ? visit.getDoctor().getName() : "Unknown Doctor",
 				visit.getDiagnosis() != null ? visit.getDiagnosis().getName() : "No Diagnosis",
 				visit.getSickLeave() != null ? visit.getSickLeave().getStartDate() : null,

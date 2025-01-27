@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -31,10 +32,14 @@ public class Visit {
 	private Diagnosis diagnosis;
 	
 	@Column(nullable = false)
-	private LocalDate date;
+	private LocalDateTime dateTime; // Дата и час на посещението
 	
-	@OneToOne(mappedBy = "visit")
+	@OneToOne(mappedBy = "visit", cascade = CascadeType.ALL)
 	private SickLeave sickLeave;
 	
+	@Column(length = 500)
+	private String treatment; // Лечение, предписано от лекаря
 	
+	@Column(length = 1000)
+	private String notes; // Бележки към посещението
 }

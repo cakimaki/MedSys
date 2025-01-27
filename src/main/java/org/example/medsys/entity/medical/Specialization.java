@@ -23,7 +23,6 @@ public class Specialization {
 	
 	@ManyToMany(mappedBy = "specializations")
 	private List<Doctor> doctors;
-	
-	// Getters and Setters
+
 }
 

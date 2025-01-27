@@ -1,4 +1,4 @@
-package org.example.medsys.service;
+package org.example.medsys.service.medical;
 
 
 import org.example.medsys.dto.VisitDto;

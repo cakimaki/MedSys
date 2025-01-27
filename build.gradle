@@ -50,6 +50,10 @@ dependencies {
     //validation (dto)
     implementation 'org.springframework.boot:spring-boot-starter-validation:3.4.1'
 
+    //ModelMapper mapping entities to dtos
+    implementation 'org.modelmapper:modelmapper:3.2.2'
+
+
 }
 
 tasks.named('test') {

@@ -3,6 +3,7 @@ package org.example.medsys.entity.medical;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.medsys.entity.auth.AppUser;
 
 import java.util.List;
 
@@ -14,6 +15,10 @@ public class Doctor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@OneToOne()
+	@JoinColumn(name = "user_id", nullable = false)
+	private AppUser user; //link to AppUser for authentication.
 	
 	@Column(nullable = false)
 	private String name;

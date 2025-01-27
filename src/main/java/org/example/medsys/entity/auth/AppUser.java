@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.medsys.entity.medical.Doctor;
 import org.example.medsys.entity.medical.Patient;
 
 import java.time.LocalDateTime;
@@ -43,4 +44,7 @@ public class AppUser {
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private Patient patient;
+	
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	private Doctor doctor;
 }

@@ -19,7 +19,7 @@ public class Patient {
 	
 	@OneToOne
 	@JoinColumn(name = "user_id", nullable = false)
-	private AppUser user; // Link to AppUser for authentication
+	private AppUser user; //link to AppUser for authentication.
 	
 	@Column(nullable = false)
 	private String name;

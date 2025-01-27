@@ -23,7 +23,5 @@ public class Diagnosis {
 	
 	@OneToMany(mappedBy = "diagnosis")
 	private List<Visit> visits;
-	
-	// Getters and Setters
 }
 

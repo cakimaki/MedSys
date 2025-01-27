@@ -1,4 +1,4 @@
-package org.example.medsys.controller;
+package org.example.medsys.controller.admin;
 
 
 import org.example.medsys.dto.AppUserRequest;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/")
-public class AdminAccessController {
+public class AccessController {
 	
 	private final AppUserService appUserService;
 	
 	@Autowired
-	public AdminAccessController(AppUserService appUserService) {
+	public AccessController(AppUserService appUserService) {
 		this.appUserService = appUserService;
 	}
 	
@@ -31,13 +31,25 @@ public class AdminAccessController {
 	@GetMapping("/test")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<String> adminAccessMethodRequest() {
-		return ResponseEntity.ok("Welcome, Admin! You have access to this endpoint.");
+		return ResponseEntity.ok("Patient endpoint works. with @PreAuthorize.");
+	}
+	
+	// Doctor Enpoint
+	@GetMapping("/api/doctor/home")
+	public ResponseEntity<String> doctorAccessApi(){
+		return ResponseEntity.ok("Doctor endpoint works.");
+	}
+	
+	// Patient Enpoint
+	@GetMapping("/api/patient/home")
+	public ResponseEntity<String> patientAccessApi(){
+		return ResponseEntity.ok("Patient endpoint works.");
 	}
 	
 	// Admin-Specific Endpoint (Protected)
 	@GetMapping("/api/admin/home")
 	public ResponseEntity<String> adminAccessApi() {
-		return ResponseEntity.ok("Welcome, Admin! You have access to this endpoint.");
+		return ResponseEntity.ok("Admin endpoint works.");
 	}
 	
 	// Create a User (Admin Only)

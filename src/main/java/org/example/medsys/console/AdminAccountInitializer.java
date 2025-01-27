@@ -2,6 +2,7 @@ package org.example.medsys.console;
 
 import org.example.medsys.entity.auth.AppUser;
 import org.example.medsys.entity.auth.Role;
+import org.example.medsys.entity.medical.Specialization;
 import org.example.medsys.repository.auth.AppUserRepository;
 import org.example.medsys.repository.auth.RoleRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -20,6 +21,7 @@ public class AdminAccountInitializer {
 			RoleRepository roleRepository,
 			PasswordEncoder passwordEncoder) {
 		return args -> {
+			
 			// Check if an admin account already exists
 			if (appUserRepository.findByEgn("admin").isEmpty()) {
 				// Create ADMIN role if it doesn't exist
@@ -37,6 +39,7 @@ public class AdminAccountInitializer {
 			} else {
 				System.out.println("Admin account already exists");
 			}
+			
 		};
 	}
 }
