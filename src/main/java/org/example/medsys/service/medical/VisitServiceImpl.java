@@ -1,6 +1,6 @@
 package org.example.medsys.service.medical;
 
-import org.example.medsys.dto.VisitDto;
+import org.example.medsys.dto.medical.visit.VisitDto;
 import org.example.medsys.entity.medical.Patient;
 import org.example.medsys.entity.medical.Visit;
 import org.example.medsys.repository.medical.PatientRepository;

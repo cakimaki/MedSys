@@ -1,4 +1,4 @@
-package org.example.medsys.dto;
+package org.example.medsys.dto.medical.visit;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

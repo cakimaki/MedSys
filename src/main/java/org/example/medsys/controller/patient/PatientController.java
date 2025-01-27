@@ -1,13 +1,10 @@
 package org.example.medsys.controller.patient;
 
-import org.example.medsys.dto.VisitDto;
-import org.example.medsys.dto.auth.PatientCreationRequest;
-import org.example.medsys.dto.auth.PatientCreationResponse;
+import org.example.medsys.dto.medical.visit.VisitDto;
 import org.example.medsys.service.medical.PatientService;
 import org.example.medsys.service.medical.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 

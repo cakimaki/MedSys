@@ -1,4 +1,4 @@
-package org.example.medsys.dto.auth;
+package org.example.medsys.dto.medical.patient;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package org.example.medsys.controller.admin;
 
 
-import org.example.medsys.dto.AppUserRequest;
+import org.example.medsys.dto.auth.AppUserRequest;
 import org.example.medsys.entity.auth.AppUser;
 import org.example.medsys.service.auth.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class AccessController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body("Home accessed.");
 	}
 	
-	// Admin-Specific Access (Protected by Role)
+	// Admin-Specific Access
 	@GetMapping("/test")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<String> adminAccessMethodRequest() {
@@ -46,7 +46,7 @@ public class AccessController {
 		return ResponseEntity.ok("Patient endpoint works.");
 	}
 	
-	// Admin-Specific Endpoint (Protected)
+	// Admin Endpoint
 	@GetMapping("/api/admin/home")
 	public ResponseEntity<String> adminAccessApi() {
 		return ResponseEntity.ok("Admin endpoint works.");

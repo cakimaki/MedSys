@@ -1,4 +1,4 @@
-package org.example.medsys.dto;
+package org.example.medsys.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

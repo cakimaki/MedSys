@@ -1,7 +1,7 @@
 package org.example.medsys.service.medical;
 
 
-import org.example.medsys.dto.VisitDto;
+import org.example.medsys.dto.medical.visit.VisitDto;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package org.example.medsys.controller.admin;
 
-import org.example.medsys.dto.auth.PatientCreationRequest;
-import org.example.medsys.dto.auth.PatientCreationResponse;
+import org.example.medsys.dto.medical.patient.PatientCreationRequest;
+import org.example.medsys.dto.medical.patient.PatientCreationResponse;
 import org.example.medsys.service.medical.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,6 @@ public class AdminPatientController {
 		this.patientService = patientService;
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/patient/create")
 	public ResponseEntity<PatientCreationResponse> createPatient(@RequestBody PatientCreationRequest dto) {
 		try{

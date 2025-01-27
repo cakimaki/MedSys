@@ -1,8 +1,8 @@
 package org.example.medsys.service.medical;
 
 import jakarta.transaction.Transactional;
-import org.example.medsys.dto.auth.PatientCreationRequest;
-import org.example.medsys.dto.auth.PatientCreationResponse;
+import org.example.medsys.dto.medical.patient.PatientCreationRequest;
+import org.example.medsys.dto.medical.patient.PatientCreationResponse;
 import org.example.medsys.entity.auth.AppUser;
 import org.example.medsys.entity.medical.Doctor;
 import org.example.medsys.entity.medical.Patient;
@@ -37,7 +37,7 @@ public class PatientServiceImpl implements PatientService{
 		AppUser appUser = appUserService.createAppUser(
 				dto.getEgn(),
 				dto.getPassword(),
-				Collections.singletonList("ROLE_PATIENT")
+				Collections.singletonList("PATIENT")
 		);
 		
 		// Fetch GP
