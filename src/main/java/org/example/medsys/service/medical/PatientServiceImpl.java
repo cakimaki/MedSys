@@ -61,6 +61,7 @@ public class PatientServiceImpl implements PatientService{
 	}
 	
 	@Override
+	@Transactional
 	public PatientResponse getPatientById(Long id) {
 		Patient patient = patientRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Patient not found with id: " + id));
@@ -68,6 +69,7 @@ public class PatientServiceImpl implements PatientService{
 	}
 	
 	@Override
+	@Transactional
 	public List<PatientResponse> getAllPatients() {
 		List<Patient> patients = patientRepository.findAll();
 		return patients.stream()
@@ -76,6 +78,7 @@ public class PatientServiceImpl implements PatientService{
 	}
 	
 	@Override
+	@Transactional
 	public List<PatientResponse> getAllPatientsByGpId(Long gpId) {
 		List<Patient> patients = patientRepository.findAllByGpId(gpId);
 		return patients.stream()
@@ -96,6 +99,7 @@ public class PatientServiceImpl implements PatientService{
 		response.setId(patient.getId());
 		response.setName(patient.getName());
 		response.setEgn(patient.getUser().getEgn());
+		response.setGpId(patient.getGp().getId());
 		response.setGpName(patient.getGp().getName()); // Map GP's name
 		response.setInsured(patient.isInsured());
 		return response;

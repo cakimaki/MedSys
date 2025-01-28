@@ -1,4 +1,4 @@
-package org.example.medsys.dto;
+package org.example.medsys.dto.medical.diagnosis;
 
 import lombok.Getter;
 import lombok.Setter;

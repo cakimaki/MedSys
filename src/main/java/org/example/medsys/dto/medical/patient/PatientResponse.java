@@ -10,5 +10,6 @@ public class PatientResponse {
 	private String name;
 	private String egn;
 	private String gpName; // Optional field for GP name
+	private Long gpId;
 	private boolean insured;
 }

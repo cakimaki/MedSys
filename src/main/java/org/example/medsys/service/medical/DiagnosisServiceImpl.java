@@ -2,12 +2,15 @@ package org.example.medsys.service.medical;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.example.medsys.dto.DiagnosisRequest;
-import org.example.medsys.dto.DiagnosisResponse;
+import org.example.medsys.dto.medical.diagnosis.DiagnosisRequest;
+import org.example.medsys.dto.medical.diagnosis.DiagnosisResponse;
 import org.example.medsys.entity.medical.Diagnosis;
 import org.example.medsys.repository.medical.DiagnosisRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -19,36 +22,66 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 	@Transactional
 	@Override
 	public DiagnosisResponse createDiagnosis(DiagnosisRequest request) {
-		// Check if the diagnosis already exists
 		if (diagnosisRepository.existsByName(request.getName())) {
-			throw new IllegalArgumentException("Diagnosis with the same name already exists.");
+			throw new IllegalArgumentException("Diagnosis with name '" + request.getName() + "' already exists.");
 		}
 		
-		// Create and save the diagnosis
+		// Create and save diagnosis
 		Diagnosis diagnosis = new Diagnosis();
 		diagnosis.setName(request.getName());
 		Diagnosis savedDiagnosis = diagnosisRepository.save(diagnosis);
 		
-		// Map to response DTO
-		return modelMapper.map(savedDiagnosis, DiagnosisResponse.class);
+		// Map to response
+		return mapToDiagnosisResponse(savedDiagnosis);
 	}
 	
 	@Override
-	public DiagnosisResponse getDiagnosisById(Long id) {
-		// Fetch diagnosis by ID
-		Diagnosis diagnosis = diagnosisRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Diagnosis not found."));
-		return modelMapper.map(diagnosis, DiagnosisResponse.class);
+	public List<DiagnosisResponse> getAllDiagnosis() {
+		List<Diagnosis> diagnoses = diagnosisRepository.findAll();
+		return diagnoses.stream()
+				.map(this::mapToDiagnosisResponse)
+				.collect(Collectors.toList());
 	}
 	
+	@Override
 	@Transactional
-	@Override
-	public void deleteDiagnosis(Long id) {
-		// Check if the diagnosis exists
+	public DiagnosisResponse updateDiagnosis(Long id, DiagnosisRequest request) {
+		// Fetch existing diagnosis
 		Diagnosis diagnosis = diagnosisRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Diagnosis not found."));
+				.orElseThrow(() -> new IllegalArgumentException("Diagnosis not found with id: " + id));
 		
-		// Delete the diagnosis
+		// Update name
+		if (!diagnosis.getName().equals(request.getName())) {
+			if (diagnosisRepository.existsByName(request.getName())) {
+				throw new IllegalArgumentException("Diagnosis with name '" + request.getName() + "' already exists.");
+			}
+			diagnosis.setName(request.getName());
+		}
+		
+		// Save updated diagnosis
+		Diagnosis updatedDiagnosis = diagnosisRepository.save(diagnosis);
+		
+		// Map to response
+		return mapToDiagnosisResponse(updatedDiagnosis);
+	}
+	
+	@Override
+	@Transactional
+	public void deleteDiagnosis(Long id) {
+		Diagnosis diagnosis = diagnosisRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Diagnosis not found with id: " + id));
+		
+		if (diagnosis.getVisits() != null && !diagnosis.getVisits().isEmpty()) {
+			throw new IllegalStateException("Cannot delete diagnosis with associated visits.");
+		}
+		
 		diagnosisRepository.delete(diagnosis);
+	}
+	
+	private DiagnosisResponse mapToDiagnosisResponse(Diagnosis diagnosis) {
+		DiagnosisResponse response = new DiagnosisResponse();
+		response.setId(diagnosis.getId());
+		response.setName(diagnosis.getName());
+		return response;
 	}
 }
