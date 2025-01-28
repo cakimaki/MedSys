@@ -1,8 +1,10 @@
 package org.example.medsys.service.medical;
 
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.example.medsys.dto.medical.patient.PatientCreationRequest;
 import org.example.medsys.dto.medical.patient.PatientCreationResponse;
+import org.example.medsys.dto.medical.patient.PatientResponse;
 import org.example.medsys.entity.auth.AppUser;
 import org.example.medsys.entity.medical.Doctor;
 import org.example.medsys.entity.medical.Patient;
@@ -13,22 +15,17 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class PatientServiceImpl implements PatientService{
 	
 	private final PatientRepository patientRepository;
 	private final AppUserService appUserService;
 	private final DoctorRepository doctorRepository;
 	private final ModelMapper modelMapper;
-	
-	public PatientServiceImpl(PatientRepository patientRepository, AppUserService appUserService, DoctorRepository doctorRepository, ModelMapper modelMapper) {
-		this.patientRepository = patientRepository;
-		this.appUserService = appUserService;
-		this.doctorRepository = doctorRepository;
-		this.modelMapper = modelMapper;
-	}
-	
 	
 	@Override
 	@Transactional
@@ -53,7 +50,54 @@ public class PatientServiceImpl implements PatientService{
 		
 		Patient savedPatient = patientRepository.save(patient);
 		
-		// Map Patient to PatientCreationResponse using ModelMapper
-		return modelMapper.map(savedPatient, PatientCreationResponse.class);
+		// Manual mapping for the response
+		PatientCreationResponse response = new PatientCreationResponse();
+		response.setId(savedPatient.getId());
+		response.setName(savedPatient.getName());
+		response.setEgn(savedPatient.getUser().getEgn());
+		response.setInsured(savedPatient.isInsured());
+		
+		return response;
+	}
+	
+	@Override
+	public PatientResponse getPatientById(Long id) {
+		Patient patient = patientRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Patient not found with id: " + id));
+		return mapToPatientResponse(patient);
+	}
+	
+	@Override
+	public List<PatientResponse> getAllPatients() {
+		List<Patient> patients = patientRepository.findAll();
+		return patients.stream()
+				.map(this::mapToPatientResponse)
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<PatientResponse> getAllPatientsByGpId(Long gpId) {
+		List<Patient> patients = patientRepository.findAllByGpId(gpId);
+		return patients.stream()
+				.map(this::mapToPatientResponse)
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	@Transactional
+	public void deletePatient(Long id) {
+		Patient patient = patientRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Patient not found with id: " + id));
+		patientRepository.delete(patient);
+	}
+	
+	private PatientResponse mapToPatientResponse(Patient patient) {
+		PatientResponse response = new PatientResponse();
+		response.setId(patient.getId());
+		response.setName(patient.getName());
+		response.setEgn(patient.getUser().getEgn());
+		response.setGpName(patient.getGp().getName()); // Map GP's name
+		response.setInsured(patient.isInsured());
+		return response;
 	}
 }

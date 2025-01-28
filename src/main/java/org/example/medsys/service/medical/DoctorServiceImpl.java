@@ -1,7 +1,7 @@
 package org.example.medsys.service.medical;
 
-import aj.org.objectweb.asm.commons.Remapper;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.example.medsys.dto.medical.doctor.DoctorRequest;
 import org.example.medsys.dto.medical.doctor.DoctorResponse;
 import org.example.medsys.entity.auth.AppUser;
@@ -15,29 +15,24 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class DoctorServiceImpl implements DoctorService{
+@AllArgsConstructor
+public class DoctorServiceImpl implements DoctorService {
 	private final DoctorRepository doctorRepository;
-	private final AppUserService appUserService;
 	private final SpecializationRepository specializationRepository;
-	private final ModelMapper modelMapper;
+	private final AppUserService appUserService;
 	
-	public DoctorServiceImpl(DoctorRepository doctorRepository, AppUserService appUserService, SpecializationRepository specializationRepository, ModelMapper modelMapper) {
-		this.doctorRepository = doctorRepository;
-		this.appUserService = appUserService;
-		this.specializationRepository = specializationRepository;
-		this.modelMapper = modelMapper;
-	}
 	
-	@Transactional
 	@Override
+	@Transactional
 	public DoctorResponse createDoctor(DoctorRequest request) {
 		// Create AppUser with doctor role
 		AppUser appUser = appUserService.createAppUser(
 				request.getEgn(),
 				request.getPassword(),
-				Collections.singletonList("ROLE_DOCTOR"));
+				Collections.singletonList("DOCTOR"));
 		
 		// Fetch Specializations
 		List<Specialization> specializations = specializationRepository.findAllById(request.getSpecializationIds());
@@ -53,12 +48,61 @@ public class DoctorServiceImpl implements DoctorService{
 		
 		Doctor savedDoctor = doctorRepository.save(doctor);
 		
-		return modelMapper.map(savedDoctor, DoctorResponse.class);
+		// Manual mapping to DoctorResponse
+		return mapToDoctorResponse(savedDoctor);
 	}
 	
-	public void deleteDoctor(long id){
+	@Override
+	@Transactional
+	public DoctorResponse fetchDoctorById(long id) {
+		// Fetch Doctor by ID
 		Doctor doctor = doctorRepository.findById(id)
-				.orElseThrow(()-> new IllegalArgumentException("Doc not found with id: " + id));
-				
+				.orElseThrow(() -> new IllegalArgumentException("Doctor not found with id: " + id));
+		
+		// Manual mapping to DoctorResponse
+		return mapToDoctorResponse(doctor);
+	}
+	
+	@Override
+	@Transactional
+	public List<DoctorResponse> fetchAllDoctors() {
+		// Fetch all doctors with specializations eagerly
+		List<Doctor> doctors = doctorRepository.findAllWithSpecializations();
+		
+		// Log the fetched doctors for debugging
+		doctors.forEach(doctor -> {
+			System.out.println("Doctor: " + doctor.getName());
+			System.out.println("Specializations: " + doctor.getSpecializations());
+		});
+		
+		// Manual mapping to DoctorResponse list
+		return doctors.stream()
+				.map(this::mapToDoctorResponse)
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	@Transactional
+	public void deleteDoctor(long id) {
+		Doctor doctor = doctorRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Doctor not found with id: " + id));
+		
+		// Delete the doctor
+		doctorRepository.delete(doctor);
+	}
+	
+	private DoctorResponse mapToDoctorResponse(Doctor doctor) {
+		DoctorResponse response = new DoctorResponse();
+		response.setId(doctor.getId());
+		response.setName(doctor.getName());
+		response.setEgn(doctor.getUser().getEgn());
+		
+		// Map specializations to their names
+		List<String> specializationNames = doctor.getSpecializations().stream()
+				.map(Specialization::getName)
+				.collect(Collectors.toList());
+		response.setSpecializations(specializationNames);
+		
+		return response;
 	}
 }

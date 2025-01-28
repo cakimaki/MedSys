@@ -1,5 +1,6 @@
 package org.example.medsys.service.medical;
 
+import lombok.AllArgsConstructor;
 import org.example.medsys.dto.medical.visit.VisitDto;
 import org.example.medsys.entity.medical.Patient;
 import org.example.medsys.entity.medical.Visit;
@@ -12,17 +13,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class VisitServiceImpl implements VisitService{
-	
-	
 	private final VisitRepository visitRepository;
 	private final PatientRepository patientRepository;
-	
-	@Autowired
-	public VisitServiceImpl(VisitRepository visitRepository, PatientRepository patientRepository) {
-		this.visitRepository = visitRepository;
-		this.patientRepository = patientRepository;
-	}
 	
 	@Override
 	public List<VisitDto> getVisitsByPatientEmail(String egn) {

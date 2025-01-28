@@ -2,6 +2,7 @@ package org.example.medsys.service.auth;
 
 
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.example.medsys.entity.auth.AppUser;
 import org.example.medsys.entity.auth.Role;
 import org.example.medsys.repository.auth.AppUserRepository;
@@ -13,18 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class AppUserServiceImpl implements AppUserService {
 	
 	private final AppUserRepository appUserRepository;
 	private final RoleRepository roleRepository;
 	private final PasswordEncoder passwordEncoder;
-	
-	@Autowired
-	public AppUserServiceImpl(AppUserRepository appUserRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
-		this.appUserRepository = appUserRepository;
-		this.roleRepository = roleRepository;
-		this.passwordEncoder = passwordEncoder;
-	}
 	
 	@Transactional
 	@Override

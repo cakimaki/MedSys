@@ -1,6 +1,7 @@
 package org.example.medsys.service.medical;
 
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.example.medsys.dto.medical.specialization.SpecializationRequest;
 import org.example.medsys.dto.medical.specialization.SpecializationResponse;
 import org.example.medsys.entity.medical.Specialization;
@@ -12,14 +13,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class SpecializationServiceImpl implements SpecializationService{
+	
 	private final SpecializationRepository specializationRepository;
 	private final ModelMapper modelMapper;
-	
-	public SpecializationServiceImpl(SpecializationRepository specializationRepository, ModelMapper modelMapper) {
-		this.specializationRepository = specializationRepository;
-		this.modelMapper = modelMapper;
-	}
 	
 	@Override
 	@Transactional
@@ -54,6 +52,7 @@ public class SpecializationServiceImpl implements SpecializationService{
 	}
 	
 	@Override
+	@Transactional
 	public void deleteSpecialization(long id){
 		Specialization specialization = specializationRepository.findById(id)
 				.orElseThrow(()-> new IllegalArgumentException("Specialization not found."));

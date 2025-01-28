@@ -1,5 +1,6 @@
 package org.example.medsys.service.auth;
 
+import lombok.AllArgsConstructor;
 import org.example.medsys.dto.auth.RegisterRequest;
 import org.example.medsys.entity.auth.AppUser;
 import org.example.medsys.entity.auth.Role;
@@ -21,6 +22,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
 	
 	private final AppUserRepository appUserRepository;
@@ -28,19 +30,6 @@ public class AuthServiceImpl implements AuthService {
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
 	private final TokenService tokenService;
-	@Autowired
-	public AuthServiceImpl(
-			AppUserRepository appUserRepository,
-			RoleRepository roleRepository,
-			PasswordEncoder passwordEncoder,
-			AuthenticationManager authenticationManager,
-			TokenService tokenService) {
-		this.appUserRepository = appUserRepository;
-		this.roleRepository = roleRepository;
-		this.passwordEncoder = passwordEncoder;
-		this.authenticationManager = authenticationManager;
-		this.tokenService = tokenService;
-	}
 	
 	@Override
 	public String login(String egn, String password) {

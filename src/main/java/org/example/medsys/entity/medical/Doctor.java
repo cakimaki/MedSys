@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.medsys.entity.auth.AppUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,9 +28,8 @@ public class Doctor {
 	@JoinTable(
 			name = "doctor_specialization",
 			joinColumns = @JoinColumn(name = "doctor_id"),
-			inverseJoinColumns = @JoinColumn(name = "specialization_id")
-	)
-	private List<Specialization> specializations;
+			inverseJoinColumns = @JoinColumn(name = "specialization_id"))
+	private List<Specialization> specializations = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "gp")
 	private List<Patient> patients;
