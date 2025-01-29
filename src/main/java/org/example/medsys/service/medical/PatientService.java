@@ -13,6 +13,9 @@ public interface PatientService {
 	
 	PatientResponse getPatientById(Long id);
 	
+	@Transactional
+	PatientResponse getPatientByEgn(String egn);
+	
 	List<PatientResponse> getAllPatients();
 	
 	List<PatientResponse> getAllPatientsByGpId(Long gpId);

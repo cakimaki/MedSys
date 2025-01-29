@@ -1,8 +1,8 @@
 package org.example.medsys.controller.admin;
 
 import jakarta.validation.Valid;
-import org.example.medsys.dto.medical.VisitRequest;
-import org.example.medsys.dto.medical.VisitResponse;
+import org.example.medsys.dto.medical.visit.VisitRequest;
+import org.example.medsys.dto.medical.visit.VisitResponse;
 import org.example.medsys.service.medical.VisitService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

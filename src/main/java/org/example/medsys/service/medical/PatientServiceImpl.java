@@ -68,6 +68,14 @@ public class PatientServiceImpl implements PatientService{
 		return mapToPatientResponse(patient);
 	}
 	
+	@Transactional
+	@Override
+	public PatientResponse getPatientByEgn(String egn) {
+		Patient patient = patientRepository.findByUser_Egn(egn)
+				.orElseThrow(() -> new IllegalArgumentException("Patient not found with EGN: " + egn));
+		return mapToPatientResponse(patient);
+	}
+	
 	@Override
 	@Transactional
 	public List<PatientResponse> getAllPatients() {

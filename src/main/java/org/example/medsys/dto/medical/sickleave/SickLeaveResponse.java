@@ -1,4 +1,4 @@
-package org.example.medsys.dto.medical;
+package org.example.medsys.dto.medical.sickleave;
 
 import lombok.Getter;
 import lombok.Setter;

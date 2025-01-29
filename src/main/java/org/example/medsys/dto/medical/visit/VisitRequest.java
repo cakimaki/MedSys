@@ -1,4 +1,4 @@
-package org.example.medsys.dto.medical;
+package org.example.medsys.dto.medical.visit;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,7 +14,6 @@ public class VisitRequest {
 	@NotNull(message = "Patient ID cannot be null")
 	private Long patientId;
 	
-	@NotNull(message = "Doctor ID cannot be null")
 	private Long doctorId;
 	
 	private Long diagnosisId;

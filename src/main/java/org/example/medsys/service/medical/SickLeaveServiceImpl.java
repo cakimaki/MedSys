@@ -1,8 +1,8 @@
 package org.example.medsys.service.medical;
 
 import jakarta.transaction.Transactional;
-import org.example.medsys.dto.medical.SickLeaveRequest;
-import org.example.medsys.dto.medical.SickLeaveResponse;
+import org.example.medsys.dto.medical.sickleave.SickLeaveRequest;
+import org.example.medsys.dto.medical.sickleave.SickLeaveResponse;
 import org.example.medsys.dto.medical.sickleave.SickLeaveUpdateRequest;
 import org.example.medsys.entity.medical.SickLeave;
 import org.example.medsys.entity.medical.Visit;

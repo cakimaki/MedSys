@@ -2,8 +2,8 @@ package org.example.medsys.service.medical;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.example.medsys.dto.medical.VisitRequest;
-import org.example.medsys.dto.medical.VisitResponse;
+import org.example.medsys.dto.medical.visit.VisitRequest;
+import org.example.medsys.dto.medical.visit.VisitResponse;
 import org.example.medsys.entity.medical.Diagnosis;
 import org.example.medsys.entity.medical.Doctor;
 import org.example.medsys.entity.medical.Patient;
@@ -45,6 +45,32 @@ public class VisitServiceImpl implements VisitService {
 		}
 		
 		// Create Visit
+		return getVisitResponse(request, patient, doctor, diagnosis);
+	}
+	
+	@Transactional
+	@Override
+	public VisitResponse createVisitForDoctor(VisitRequest request, String doctorEgn) {
+		// Fetch Patient
+		Patient patient = patientRepository.findById(request.getPatientId())
+				.orElseThrow(() -> new IllegalArgumentException("Patient not found with ID: " + request.getPatientId()));
+		
+		// Fetch Doctor using EGN
+		Doctor doctor = doctorRepository.findByUser_Egn(doctorEgn)
+				.orElseThrow(() -> new IllegalArgumentException("Doctor not found with EGN: " + doctorEgn));
+		
+		// Fetch Diagnosis (optional)
+		Diagnosis diagnosis = null;
+		if (request.getDiagnosisId() != null) {
+			diagnosis = diagnosisRepository.findById(request.getDiagnosisId())
+					.orElseThrow(() -> new IllegalArgumentException("Diagnosis not found with ID: " + request.getDiagnosisId()));
+		}
+		
+		// Create Visit
+		return getVisitResponse(request, patient, doctor, diagnosis);
+	}
+	
+	private VisitResponse getVisitResponse(VisitRequest request, Patient patient, Doctor doctor, Diagnosis diagnosis) {
 		Visit visit = new Visit();
 		visit.setPatient(patient);
 		visit.setDoctor(doctor);
@@ -55,7 +81,6 @@ public class VisitServiceImpl implements VisitService {
 		
 		Visit savedVisit = visitRepository.save(visit);
 		
-		// Map to response
 		return mapToVisitResponse(savedVisit);
 	}
 	

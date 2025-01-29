@@ -32,7 +32,7 @@ public class Visit {
 	private Diagnosis diagnosis;
 	
 	@Column(nullable = false)
-	private LocalDateTime dateTime; // Дата и час на посещението
+	private LocalDateTime dateTime;
 	
 	@OneToOne(mappedBy = "visit", cascade = CascadeType.ALL)
 	private SickLeave sickLeave;

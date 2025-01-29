@@ -16,4 +16,6 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
 	Optional<Patient> findByUserEgn(@Param("egn") String egn);
 	
 	List<Patient> findAllByGpId(Long gpId);
+	
+	Optional<Patient> findByUser_Egn(String egn);
 }
