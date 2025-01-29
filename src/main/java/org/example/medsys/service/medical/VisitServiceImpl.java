@@ -60,14 +60,6 @@ public class VisitServiceImpl implements VisitService {
 	}
 	
 	@Override
-	public List<VisitResponse> getAllVisits() {
-		List<Visit> visits = visitRepository.findAll();
-		return visits.stream()
-				.map(this::mapToVisitResponse)
-				.collect(Collectors.toList());
-	}
-	
-	@Override
 	public VisitResponse getVisitById(Long id) {
 		Visit visit = visitRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Visit not found with id: " + id));
@@ -80,6 +72,20 @@ public class VisitServiceImpl implements VisitService {
 		List<Visit> visits = visitRepository.findAllByPatientId(patientId);
 		if (visits.isEmpty()) {
 			throw new IllegalArgumentException("No visits found for patient with id: " + patientId);
+		}
+		
+		// Map visits to responses
+		return visits.stream()
+				.map(this::mapToVisitResponse)
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<VisitResponse> getVisitsByDoctor(Long doctorId) {
+		// Fetch visits by doctor ID
+		List<Visit> visits = visitRepository.findAllByDoctorId(doctorId);
+		if (visits.isEmpty()) {
+			throw new IllegalArgumentException("No visits found for doctor with id: " + doctorId);
 		}
 		
 		// Map visits to responses
@@ -141,6 +147,13 @@ public class VisitServiceImpl implements VisitService {
 		response.setDateTime(visit.getDateTime());
 		response.setTreatment(visit.getTreatment());
 		response.setNotes(visit.getNotes());
+		
+		// Map sick leave details if present
+		if (visit.getSickLeave() != null) {
+			response.setSickLeaveStartDate(visit.getSickLeave().getStartDate());
+			response.setSickLeaveDurationDays(visit.getSickLeave().getDurationDays());
+		}
+		
 		return response;
 	}
 }

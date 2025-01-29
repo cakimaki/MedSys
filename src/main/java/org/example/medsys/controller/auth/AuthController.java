@@ -1,4 +1,4 @@
-package org.example.medsys.controller;
+package org.example.medsys.controller.auth;
 
 import org.example.medsys.dto.auth.LoginRequest;
 import org.example.medsys.dto.auth.RegisterRequest;

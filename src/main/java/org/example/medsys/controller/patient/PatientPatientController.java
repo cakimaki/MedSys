@@ -12,13 +12,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/patient")
-public class PatientController {
+public class PatientPatientController {
 	
 	private final VisitService visitService;
 	private final PatientService patientService;
 	
 	@Autowired
-	public PatientController(VisitService visitService, PatientService patientService) {
+	public PatientPatientController(VisitService visitService, PatientService patientService) {
 		this.visitService = visitService;
 		this.patientService = patientService;
 	}
@@ -31,8 +31,8 @@ public class PatientController {
 		String email = authentication.getName();
 		
 		// Fetch visits specific to this patient
-		List<VisitDto> visits = visitService.getVisitsByPatientEmail(email);
-		return ResponseEntity.ok(visits);
+		//List<VisitDto> visits = visitService.getVisitsByPatientEmail(email);
+		return null ;//ResponseEntity.ok(visits);
 	}
 	
 	//DOCTOR REQUESTS

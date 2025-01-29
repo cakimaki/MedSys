@@ -3,6 +3,7 @@ package org.example.medsys.dto.medical;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,4 +16,8 @@ public class VisitResponse {
 	private LocalDateTime dateTime;
 	private String treatment;
 	private String notes;
+	
+	// SickLeave fields
+	private LocalDate sickLeaveStartDate;
+	private Integer sickLeaveDurationDays;
 }

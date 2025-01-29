@@ -11,7 +11,5 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
 	
 	List<Visit> findAllByPatientId(Long patientId);
 	
-	//if using the native query . -
-	/*@Query("SELECT v FROM Visit v WHERE v.patient.id = :patientId")
-	List<Visit> findByPatientId(@Param("patientId") Long patientId);*/
+	List<Visit> findAllByDoctorId(Long doctorId);
 }

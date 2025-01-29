@@ -26,16 +26,22 @@ public class AdminVisitController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 	
-	@GetMapping
-	public ResponseEntity<List<VisitResponse>> getAllVisits() {
-		List<VisitResponse> responses = visitService.getAllVisits();
-		return ResponseEntity.ok(responses);
-	}
-	
 	@GetMapping("/{id}")
 	public ResponseEntity<VisitResponse> getVisitById(@PathVariable Long id) {
 		VisitResponse response = visitService.getVisitById(id);
 		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping("/patient/{patientId}")
+	public ResponseEntity<List<VisitResponse>> getVisitsByPatient(@PathVariable Long patientId) {
+		List<VisitResponse> responses = visitService.getVisitsByPatient(patientId);
+		return ResponseEntity.ok(responses);
+	}
+	
+	@GetMapping("/doctor/{doctorId}")
+	public ResponseEntity<List<VisitResponse>> getVisitsByDoctor(@PathVariable Long doctorId) {
+		List<VisitResponse> responses = visitService.getVisitsByDoctor(doctorId);
+		return ResponseEntity.ok(responses);
 	}
 	
 	@PutMapping("/{id}")

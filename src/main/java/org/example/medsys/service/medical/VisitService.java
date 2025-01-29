@@ -12,11 +12,11 @@ public interface VisitService {
 	@Transactional
 	VisitResponse createVisit(VisitRequest request);
 	
-	List<VisitResponse> getAllVisits();
-	
 	VisitResponse getVisitById(Long id);
 	
 	List<VisitResponse> getVisitsByPatient(Long patientId);
+	
+	List<VisitResponse> getVisitsByDoctor(Long doctorId);
 	
 	@Transactional
 	VisitResponse updateVisit(Long id, VisitRequest request);
