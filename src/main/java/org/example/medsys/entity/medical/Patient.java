@@ -33,4 +33,7 @@ public class Patient {
 	
 	@Column(nullable = false)
 	private boolean isInsured; // Insurance status
+	
+	@OneToMany(mappedBy = "patient",cascade = CascadeType.ALL)
+	private List<InsurancePayment> insurancePayments;
 }
