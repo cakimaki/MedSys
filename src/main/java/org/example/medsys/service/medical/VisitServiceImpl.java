@@ -14,6 +14,7 @@ import org.example.medsys.repository.medical.PatientRepository;
 import org.example.medsys.repository.medical.VisitRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,7 +76,12 @@ public class VisitServiceImpl implements VisitService {
 		visit.setPatient(patient);
 		visit.setDoctor(doctor);
 		visit.setDiagnosis(diagnosis);
-		visit.setDateTime(request.getDateTime());
+		if(request.getDateTime()==null){
+			visit.setDateTime(LocalDateTime.now());
+			
+		}else{
+			visit.setDateTime(request.getDateTime());
+		}
 		visit.setTreatment(request.getTreatment());
 		visit.setNotes(request.getNotes());
 		
@@ -92,7 +98,7 @@ public class VisitServiceImpl implements VisitService {
 	}
 	
 	@Override
-	public List<VisitResponse> getVisitsByPatient(Long patientId) {
+	public List<VisitResponse> getVisitsByPatientId(Long patientId) {
 		// Fetch visits by patient ID
 		List<Visit> visits = visitRepository.findAllByPatientId(patientId);
 		if (visits.isEmpty()) {
@@ -106,7 +112,21 @@ public class VisitServiceImpl implements VisitService {
 	}
 	
 	@Override
-	public List<VisitResponse> getVisitsByDoctor(Long doctorId) {
+	public List<VisitResponse> getVisitsByPatientEgn(String patientEgn) {
+		// Fetch visits by patient egn
+		List<Visit> visits = visitRepository.findAllByPatient_User_Egn(patientEgn);
+		if (visits.isEmpty()) {
+			throw new IllegalArgumentException("No visits found for patient with egn: " + patientEgn);
+		}
+		
+		// Map visits to responses
+		return visits.stream()
+				.map(this::mapToVisitResponse)
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<VisitResponse> getVisitsByDoctorId(Long doctorId) {
 		// Fetch visits by doctor ID
 		List<Visit> visits = visitRepository.findAllByDoctorId(doctorId);
 		if (visits.isEmpty()) {
@@ -157,9 +177,51 @@ public class VisitServiceImpl implements VisitService {
 	
 	@Transactional
 	@Override
+	public VisitResponse updateVisitForDoctor(Long id, VisitRequest request, String doctorEgn) {
+		// Fetch the visit
+		Visit visit = visitRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Visit not found with ID: " + id));
+		
+		// Check if the authenticated doctor owns this visit
+		if (!visit.getDoctor().getUser().getEgn().equals(doctorEgn)) {
+			throw new SecurityException("You do not have permission to update this visit.");
+		}
+		
+		// Update optional fields
+		if (request.getDiagnosisId() != null && (visit.getDiagnosis() == null ||
+				!visit.getDiagnosis().getId().equals(request.getDiagnosisId()))) {
+			Diagnosis diagnosis = diagnosisRepository.findById(request.getDiagnosisId())
+					.orElseThrow(() -> new IllegalArgumentException("Diagnosis not found with ID: " + request.getDiagnosisId()));
+			visit.setDiagnosis(diagnosis);
+		}
+		
+		visit.setDateTime(request.getDateTime() != null ? request.getDateTime() : visit.getDateTime());
+		visit.setTreatment(request.getTreatment());
+		visit.setNotes(request.getNotes());
+		
+		Visit updatedVisit = visitRepository.save(visit);
+		return mapToVisitResponse(updatedVisit);
+	}
+	
+	@Transactional
+	@Override
 	public void deleteVisit(Long id) {
 		Visit visit = visitRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Visit not found with id: " + id));
+		visitRepository.delete(visit);
+	}
+	
+	@Transactional
+	@Override
+	public void deleteVisitForDoctor(Long id, String doctorEgn) {
+		Visit visit = visitRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Visit not found with ID: " + id));
+		
+		// Check if the authenticated doctor owns this visit
+		if (!visit.getDoctor().getUser().getEgn().equals(doctorEgn)) {
+			throw new SecurityException("You do not have permission to delete this visit.");
+		}
+		
 		visitRepository.delete(visit);
 	}
 	

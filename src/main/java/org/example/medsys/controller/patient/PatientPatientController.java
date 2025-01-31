@@ -1,5 +1,6 @@
 package org.example.medsys.controller.patient;
 
+import org.example.medsys.dto.medical.patient.PatientResponse;
 import org.example.medsys.dto.medical.visit.VisitDto;
 import org.example.medsys.service.medical.PatientService;
 import org.example.medsys.service.medical.VisitService;
@@ -23,20 +24,10 @@ public class PatientPatientController {
 		this.patientService = patientService;
 	}
 	
-	
-	
-	@GetMapping("/visits")
-	public ResponseEntity<List<VisitDto>> getMyVisits(Authentication authentication) {
-		// Get the authenticated patient's username (email)
-		String email = authentication.getName();
-		
-		// Fetch visits specific to this patient
-		//List<VisitDto> visits = visitService.getVisitsByPatientEmail(email);
-		return null ;//ResponseEntity.ok(visits);
+	@GetMapping
+	public ResponseEntity<PatientResponse> getPatient(Authentication authentication){
+		String egn = authentication.getName();
+		PatientResponse response = patientService.getPatientByEgn(egn);
+		return ResponseEntity.ok(response);
 	}
-	
-	//DOCTOR REQUESTS
-	
-	//PATIENT REQUESTS
-	
 }

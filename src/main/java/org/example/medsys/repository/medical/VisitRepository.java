@@ -12,4 +12,6 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
 	List<Visit> findAllByPatientId(Long patientId);
 	
 	List<Visit> findAllByDoctorId(Long doctorId);
+	
+	List<Visit> findAllByPatient_User_Egn(String egn);
 }

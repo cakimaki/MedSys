@@ -18,10 +18,20 @@ public interface VisitService {
 	
 	//common
 	VisitResponse getVisitById(Long id);
-	List<VisitResponse> getVisitsByPatient(Long patientId);
-	List<VisitResponse> getVisitsByDoctor(Long doctorId);
+	List<VisitResponse> getVisitsByPatientId(Long patientId);
+	
+	List<VisitResponse> getVisitsByPatientEgn(String patientEgn);
+	
+	List<VisitResponse> getVisitsByDoctorId(Long doctorId);
 	@Transactional
 	VisitResponse updateVisit(Long id, VisitRequest request);
+	
+	@Transactional
+	VisitResponse updateVisitForDoctor(Long id, VisitRequest request, String doctorEgn);
+	
 	@Transactional
 	void deleteVisit(Long id);
+	
+	@Transactional
+	void deleteVisitForDoctor(Long id, String doctorEgn);
 }

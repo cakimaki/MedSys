@@ -18,7 +18,6 @@ public class VisitRequest {
 	
 	private Long diagnosisId;
 	
-	@NotNull(message = "Date and time cannot be null")
 	private LocalDateTime dateTime;
 	
 	@Size(max = 500, message = "Treatment must not exceed 500 characters")
