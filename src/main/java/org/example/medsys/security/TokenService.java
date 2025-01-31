@@ -1,5 +1,7 @@
 package org.example.medsys.security;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.example.medsys.entity.auth.AppUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,8 +33,9 @@ public class TokenService {
 		
 		// Build JWT claims
 		JwtClaimsSet claims = JwtClaimsSet.builder()
-				.subject(authentication.getName()) // Authenticated username
+				.subject(authentication.getName()) // Authenticated username (EGN)
 				.claim("roles", roles) // Add roles as a claim
+				.claim("userId", user.getId())
 				.issuedAt(now) // Issue time
 				.expiresAt(now.plus(1, ChronoUnit.HOURS)) // Expiration time
 				.build();
@@ -43,7 +46,12 @@ public class TokenService {
 	
 	public String extractSubject(String token) {
 		Jwt jwt = jwtDecoder.decode(token);
-		return jwt.getClaim("sub"); // Extract the subject claim (username/EGN)
+		return jwt.getClaim("sub"); // Extract the subject claim (EGN)
+	}
+	
+	public Long extractUserId(String token) {
+		Jwt jwt = jwtDecoder.decode(token);
+		return jwt.getClaim("userId"); // Extract userId from JWT claims
 	}
 }
 
