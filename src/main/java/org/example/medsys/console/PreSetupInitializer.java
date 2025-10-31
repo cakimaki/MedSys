@@ -16,8 +16,7 @@ import java.util.List;
 
 @Component
 public class PreSetupInitializer {
-	
-	//
+
 	@Bean
 	public CommandLineRunner createAdminUser(
 			AppUserRepository appUserRepository,

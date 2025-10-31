@@ -1,4 +1,4 @@
-package org.example.medsys.service.medical;
+package org.example.medsys.service.medical.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -11,6 +11,7 @@ import org.example.medsys.entity.medical.Patient;
 import org.example.medsys.repository.medical.DoctorRepository;
 import org.example.medsys.repository.medical.PatientRepository;
 import org.example.medsys.service.auth.AppUserService;
+import org.example.medsys.service.medical.PatientService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class PatientServiceImpl implements PatientService{
+public class PatientServiceImpl implements PatientService {
 	
 	private final PatientRepository patientRepository;
 	private final AppUserService appUserService;

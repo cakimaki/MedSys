@@ -80,8 +80,8 @@ public class SecurityConfig {
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/api/auth/**", "/home", "/","/test").permitAll()
 						.requestMatchers("/api/admin/**").hasRole("ADMIN")
-						.requestMatchers("/api/doctor/**").hasAnyRole("DOCTOR","ADMIN")
-						.requestMatchers("/api/patient/**").hasAnyRole("ADMIN","DOCTOR","PATIENT")
+						.requestMatchers("/api/doctor/**").hasRole("DOCTOR")
+						.requestMatchers("/api/patient/**").hasRole("PATIENT")
 						.anyRequest().authenticated()
 				)
 				.httpBasic(Customizer.withDefaults()) // Enable Basic Auth

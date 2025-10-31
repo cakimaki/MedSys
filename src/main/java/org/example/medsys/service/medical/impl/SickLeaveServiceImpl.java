@@ -1,4 +1,4 @@
-package org.example.medsys.service.medical;
+package org.example.medsys.service.medical.impl;
 
 import jakarta.transaction.Transactional;
 import org.example.medsys.dto.medical.sickleave.SickLeaveRequest;
@@ -8,6 +8,7 @@ import org.example.medsys.entity.medical.SickLeave;
 import org.example.medsys.entity.medical.Visit;
 import org.example.medsys.repository.medical.SickLeaveRepository;
 import org.example.medsys.repository.medical.VisitRepository;
+import org.example.medsys.service.medical.SickLeaveService;
 import org.springframework.stereotype.Service;
 
 @Service

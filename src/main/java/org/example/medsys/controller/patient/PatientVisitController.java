@@ -26,4 +26,6 @@ public class PatientVisitController {
 		List<VisitResponse> responses = visitService.getVisitsByPatientEgn(egn);
 		return ResponseEntity.ok(responses);
 	}
+
+
 }

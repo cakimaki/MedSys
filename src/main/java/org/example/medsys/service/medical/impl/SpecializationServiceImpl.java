@@ -1,4 +1,4 @@
-package org.example.medsys.service.medical;
+package org.example.medsys.service.medical.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -6,6 +6,7 @@ import org.example.medsys.dto.medical.specialization.SpecializationRequest;
 import org.example.medsys.dto.medical.specialization.SpecializationResponse;
 import org.example.medsys.entity.medical.Specialization;
 import org.example.medsys.repository.medical.SpecializationRepository;
+import org.example.medsys.service.medical.SpecializationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class SpecializationServiceImpl implements SpecializationService{
+public class SpecializationServiceImpl implements SpecializationService {
 	
 	private final SpecializationRepository specializationRepository;
 	private final ModelMapper modelMapper;

@@ -1,4 +1,4 @@
-package org.example.medsys.service.medical;
+package org.example.medsys.service.medical.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import org.example.medsys.entity.medical.Specialization;
 import org.example.medsys.repository.medical.DoctorRepository;
 import org.example.medsys.repository.medical.SpecializationRepository;
 import org.example.medsys.service.auth.AppUserService;
-import org.modelmapper.ModelMapper;
+import org.example.medsys.service.medical.DoctorService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;

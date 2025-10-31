@@ -1,4 +1,4 @@
-package org.example.medsys.service.auth;
+package org.example.medsys.service.auth.impl;
 
 import lombok.AllArgsConstructor;
 import org.example.medsys.dto.auth.RegisterRequest;
@@ -7,18 +7,13 @@ import org.example.medsys.entity.auth.Role;
 import org.example.medsys.repository.auth.AppUserRepository;
 import org.example.medsys.repository.auth.RoleRepository;
 import org.example.medsys.security.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.medsys.service.auth.AuthService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -65,22 +60,6 @@ public class AuthServiceImpl implements AuthService {
 		
 		appUserRepository.save(user);
 	}
-	
-	// Helper method to generate JWT
-//	private String generateToken(Authentication authentication, AppUser user) {
-//		List<String> roles = user.getRoleList().stream()
-//				.map(Role::getName)
-//				.toList();
-//
-//		JwtClaimsSet claims = JwtClaimsSet.builder()
-//				.subject(authentication.getName()) // Use the authenticated username
-//				.claim("roles", roles) // Add roles as a claim
-//				.issuedAt(Instant.now()) // Token issue time
-//				.expiresAt(Instant.now().plus(1, ChronoUnit.HOURS)) // Token expiration
-//				.build();
-//
-//		return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
-//	}
 }
 
 

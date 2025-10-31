@@ -1,4 +1,4 @@
-package org.example.medsys.service.medical;
+package org.example.medsys.service.medical.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -12,6 +12,7 @@ import org.example.medsys.repository.medical.DiagnosisRepository;
 import org.example.medsys.repository.medical.DoctorRepository;
 import org.example.medsys.repository.medical.PatientRepository;
 import org.example.medsys.repository.medical.VisitRepository;
+import org.example.medsys.service.medical.VisitService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
