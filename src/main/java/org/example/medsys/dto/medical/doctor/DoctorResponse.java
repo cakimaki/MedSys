@@ -9,11 +9,13 @@ import java.util.List;
 @Setter
 public class DoctorResponse {
 	
-	private Long id; // Doctor's ID
+	private Long id;
 	
-	private String name; // Doctor's name
+	private String name;
 	
-	private String egn; // EGN for the linked AppUser
+	private String egn;
 	
-	private List<String> specializations; // Names of the doctor's specializations
+	private List<String> specializations;
+
+    private boolean active;
 }

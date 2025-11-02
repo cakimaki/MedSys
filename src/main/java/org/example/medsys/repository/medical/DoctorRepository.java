@@ -11,4 +11,5 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 	List<Doctor> findAllWithSpecializations();
 	
 	Optional<Doctor> findByUser_Egn(String doctorEgn);
+
 }

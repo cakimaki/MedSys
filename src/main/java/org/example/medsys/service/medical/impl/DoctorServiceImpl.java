@@ -54,7 +54,7 @@ public class DoctorServiceImpl implements DoctorService {
 	
 	@Override
 	@Transactional
-	public DoctorResponse fetchDoctorById(long id) {
+	public DoctorResponse fetchDoctorById(Long id) {
 		// Fetch Doctor by ID
 		Doctor doctor = doctorRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Doctor not found with id: " + id));
@@ -83,20 +83,33 @@ public class DoctorServiceImpl implements DoctorService {
 	
 	@Override
 	@Transactional
-	public void deleteDoctor(long id) {
+	public void deleteDoctor(Long id) {
 		Doctor doctor = doctorRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Doctor not found with id: " + id));
 		
-		// Delete the doctor
-		doctorRepository.delete(doctor);
+		doctor.setActive(false);
+
+        doctorRepository.save(doctor);
 	}
+
+    @Transactional
+    @Override
+    public void restoreDoctor(Long id) {
+        Doctor doctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Doctor not found with id: " + id));
+
+        doctor.setActive(true);
+
+        doctorRepository.save(doctor);
+    }
 	
 	private DoctorResponse mapToDoctorResponse(Doctor doctor) {
 		DoctorResponse response = new DoctorResponse();
 		response.setId(doctor.getId());
 		response.setName(doctor.getName());
 		response.setEgn(doctor.getUser().getEgn());
-		
+        response.setActive(doctor.isActive());
+
 		// Map specializations to their names
 		List<String> specializationNames = doctor.getSpecializations().stream()
 				.map(Specialization::getName)

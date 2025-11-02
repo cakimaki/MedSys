@@ -11,9 +11,12 @@ public interface DoctorService {
 	DoctorResponse createDoctor(DoctorRequest request);
 	
 	@Transactional
-	DoctorResponse fetchDoctorById(long id);
+	DoctorResponse fetchDoctorById(Long id);
 	
 	List<DoctorResponse> fetchAllDoctors();
 	
-	void deleteDoctor(long id);
+	void deleteDoctor(Long id);
+
+    @Transactional
+    void restoreDoctor(Long id);
 }

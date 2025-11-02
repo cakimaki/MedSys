@@ -26,8 +26,7 @@ public class PatientServiceImpl implements PatientService {
 	private final PatientRepository patientRepository;
 	private final AppUserService appUserService;
 	private final DoctorRepository doctorRepository;
-	private final ModelMapper modelMapper;
-	
+
 	@Override
 	@Transactional
 	public PatientCreationResponse createPatient(PatientCreationRequest dto) {
@@ -41,7 +40,11 @@ public class PatientServiceImpl implements PatientService {
 		// Fetch GP
 		Doctor gp = doctorRepository.findById(dto.getGpId())
 				.orElseThrow(() -> new IllegalArgumentException("GP not found."));
-		
+
+        if(!gp.isActive()){
+            throw new IllegalArgumentException("Gp is inactive.");
+        }
+
 		// Create Patient
 		Patient patient = new Patient();
 		patient.setUser(appUser);

@@ -23,7 +23,10 @@ public class Doctor {
 	
 	@Column(nullable = false)
 	private String name;
-	
+
+    @Column(nullable = false)
+    private boolean active = true;
+
 	@ManyToMany
 	@JoinTable(
 			name = "doctor_specialization",
@@ -36,5 +39,6 @@ public class Doctor {
 	
 	@OneToMany(mappedBy = "doctor")
 	private List<Visit> visits;
-	
+
+
 }

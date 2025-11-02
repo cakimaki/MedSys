@@ -6,6 +6,12 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(
+        name = "insurance_payment",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"patient_id","month", "year"})
+        }
+)
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -18,10 +24,17 @@ public class InsurancePayment {
 	@ManyToOne
 	@JoinColumn(name="patient_id",nullable = false)
 	private Patient patient;
-	
+
+    // Always stored YYYY-MM-01
 	@Column(nullable = false)
-	private LocalDate month;
+	private Integer month;
+
+    @Column(nullable = false)
+    private Integer year;
 	
 	@Column(nullable = false)
 	private boolean isPaid;
+
+    @Column(nullable = true)
+    private LocalDate paidOn;
 }

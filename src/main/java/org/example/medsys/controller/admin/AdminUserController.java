@@ -1,5 +1,6 @@
 package org.example.medsys.controller.admin;
 
+import jakarta.validation.Valid;
 import org.example.medsys.dto.AppUserResponse;
 import org.example.medsys.dto.auth.AppUserRequest;
 import org.example.medsys.entity.auth.AppUser;
@@ -15,15 +16,13 @@ import org.springframework.web.bind.annotation.*;
 public class AdminUserController {
 
     private final AppUserService appUserService;
-    private final ModelMapper modelMapper;
 
-    public AdminUserController(AppUserService appUserService, ModelMapper modelMapper) {
+    public AdminUserController(AppUserService appUserService) {
         this.appUserService = appUserService;
-        this.modelMapper = modelMapper;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<AppUserResponse> createUser(@RequestBody AppUserRequest request) {
+    public ResponseEntity<AppUserResponse> createUser(@Valid @RequestBody  AppUserRequest request) {
 
         AppUser appUserResponse = appUserService.createAppUser(
                 request.getEgn(),
