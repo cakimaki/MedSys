@@ -6,8 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -27,9 +28,13 @@ public class Visit {
 	@JoinColumn(name = "doctor_id", nullable = false)
 	private Doctor doctor;
 	
-	@ManyToOne
-	@JoinColumn(name = "diagnosis_id")
-	private Diagnosis diagnosis;
+	@ManyToMany
+    @JoinTable(
+            name = "visit_diagnosis",
+            joinColumns = @JoinColumn(name = "visit_id"),
+            inverseJoinColumns = @JoinColumn(name = "diagnosis_id")
+    )
+	private Set<Diagnosis> diagnosis = new HashSet<>();
 	
 	@Column(nullable = false)
 	private LocalDateTime dateTime;
@@ -38,8 +43,8 @@ public class Visit {
 	private SickLeave sickLeave;
 	
 	@Column(length = 500)
-	private String treatment; // Лечение, предписано от лекаря
+	private String treatment;
 	
 	@Column(length = 1000)
-	private String notes; // Бележки към посещението
+	private String notes;
 }

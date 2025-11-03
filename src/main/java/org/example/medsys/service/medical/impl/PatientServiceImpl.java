@@ -12,7 +12,6 @@ import org.example.medsys.repository.medical.DoctorRepository;
 import org.example.medsys.repository.medical.PatientRepository;
 import org.example.medsys.service.auth.AppUserService;
 import org.example.medsys.service.medical.PatientService;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -60,6 +59,7 @@ public class PatientServiceImpl implements PatientService {
 		response.setName(savedPatient.getName());
 		response.setEgn(savedPatient.getUser().getEgn());
 		response.setInsured(savedPatient.isInsured());
+        response.setGpId(dto.getGpId());
 		
 		return response;
 	}

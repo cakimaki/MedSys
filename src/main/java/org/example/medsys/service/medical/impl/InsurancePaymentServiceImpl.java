@@ -11,6 +11,7 @@ import org.example.medsys.service.medical.InsurancePaymentService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -29,13 +30,14 @@ public class InsurancePaymentServiceImpl implements InsurancePaymentService {
     @Override
     public InsurancePaymentResponse createInsurancePayment(InsurancePaymentRequest request){
         InsurancePayment payment = new InsurancePayment();
-        Patient patient = patientRepository.findById(request.getPatient_id())
-                        .orElseThrow(()-> new NoSuchElementException("No patient found wiht id" + request.getPatient_id()));
+        Patient patient = patientRepository.findById(request.getPatientId())
+                        .orElseThrow(()-> new NoSuchElementException("No patient found with id" + request.getPatientId()));
 
         payment.setPatient(patient);
         payment.setMonth(request.getMonth());
         payment.setYear(request.getYear());
-        payment.setPaid(payment.isPaid());
+        payment.setPaid(request.isPaid());
+        payment.setPaidOn(LocalDate.now());
 
         insurancePaymentRepository.save(payment);
         return toResponse(payment);
@@ -58,6 +60,7 @@ public class InsurancePaymentServiceImpl implements InsurancePaymentService {
         InsurancePayment payment = insurancePaymentRepository.findById(paymentId)
                 .orElseThrow(()-> new NoSuchElementException("No payment found with id:" + paymentId));
 
+        payment.setPaidOn(LocalDate.now());
         payment.setPaid(true);
 
         return toResponse(payment);
@@ -68,6 +71,7 @@ public class InsurancePaymentServiceImpl implements InsurancePaymentService {
         InsurancePayment payment = insurancePaymentRepository.findById(paymentId)
                 .orElseThrow(()-> new NoSuchElementException("No payment found with id:" + paymentId));
 
+        payment.setPaidOn(null);
         payment.setPaid(false);
 
         return toResponse(payment);

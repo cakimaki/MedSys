@@ -6,7 +6,9 @@ import lombok.Setter;
 import org.example.medsys.entity.auth.AppUser;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -35,10 +37,10 @@ public class Doctor {
 	private List<Specialization> specializations = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "gp")
-	private List<Patient> patients;
+	private Set<Patient> patients = new HashSet<>();
 	
 	@OneToMany(mappedBy = "doctor")
-	private List<Visit> visits;
+	private Set<Visit> visits = new HashSet<>();
 
 
 }

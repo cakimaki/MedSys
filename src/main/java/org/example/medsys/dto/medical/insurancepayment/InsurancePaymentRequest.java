@@ -1,17 +1,19 @@
 package org.example.medsys.dto.medical.insurancepayment;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 
 @Data
 public class InsurancePaymentRequest {
-    @NotBlank
-    private Long patient_id;
-    @NotBlank
+    @NotNull
+    private Long patientId;
+
+    @NotNull
     private Integer month;
-    @NotBlank
+
+    @NotNull
     private Integer year;
-    @NotBlank
+
     private boolean isPaid;
 }

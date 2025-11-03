@@ -18,7 +18,8 @@ public class DoctorPatientController {
 	public DoctorPatientController(PatientService patientService) {
 		this.patientService = patientService;
 	}
-	
+
+
 	@GetMapping("/byEgn/{egn}")
 	public ResponseEntity<PatientResponse> searchPatientByEgn(@PathVariable String egn){
 		PatientResponse response = patientService.getPatientByEgn(egn);

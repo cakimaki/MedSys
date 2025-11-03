@@ -32,7 +32,7 @@ public class AdminDoctorController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<DoctorResponse> fetchDoctorById(@PathVariable long id) {
+	public ResponseEntity<DoctorResponse> fetchDoctorById(@PathVariable Long id) {
 		DoctorResponse response = doctorService.fetchDoctorById(id);
 		return ResponseEntity.ok(response);
 	}

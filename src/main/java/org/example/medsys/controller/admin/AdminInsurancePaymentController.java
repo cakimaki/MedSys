@@ -43,7 +43,7 @@ public class AdminInsurancePaymentController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("{patientId}")
+    @GetMapping("/patient/{patientId}")
     public ResponseEntity<List<InsurancePaymentResponse>> getPaymentsInYear(
             @PathVariable Long patientId,
             @RequestParam(required = false) Integer year){

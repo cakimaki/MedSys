@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.medsys.entity.auth.AppUser;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -29,11 +30,13 @@ public class Patient {
 	private Doctor gp;
 	
 	@OneToMany(mappedBy = "patient")
-	private List<Visit> visits;
-	
+	private Set<Visit> visits = new HashSet<>();
+
+    //todo
+    // How is this used?
 	@Column(nullable = false)
-	private boolean isInsured; // Insurance status
+	private boolean isInsured;
 	
 	@OneToMany(mappedBy = "patient",cascade = CascadeType.ALL)
-	private List<InsurancePayment> insurancePayments;
+	private Set<InsurancePayment> insurancePayments = new HashSet<>();
 }
