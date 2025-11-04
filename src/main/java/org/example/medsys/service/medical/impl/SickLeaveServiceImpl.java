@@ -28,7 +28,10 @@ public class SickLeaveServiceImpl implements SickLeaveService {
 		// Fetch Visit
 		Visit visit = visitRepository.findById(request.getVisitId())
 				.orElseThrow(() -> new IllegalArgumentException("Visit not found with id: " + request.getVisitId()));
-		
+
+        if(visit.getSickLeave() != null){
+            throw new IllegalArgumentException("Sickleave for this visit is already existing.");
+        }
 		// Create SickLeave
 		SickLeave sickLeave = new SickLeave();
 		sickLeave.setVisit(visit);
@@ -65,6 +68,13 @@ public class SickLeaveServiceImpl implements SickLeaveService {
 	public void deleteSickLeave(Long id) {
 		SickLeave sickLeave = sickLeaveRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("SickLeave not found with id: " + id));
+
+        Visit visit = sickLeave.getVisit();
+        if(visit != null){
+            visit.setSickLeave(null);
+            sickLeave.setVisit(null);
+        }
+        
 		sickLeaveRepository.delete(sickLeave);
 	}
 	

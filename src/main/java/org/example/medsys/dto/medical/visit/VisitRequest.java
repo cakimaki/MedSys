@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -15,8 +17,10 @@ public class VisitRequest {
 	private Long patientId;
 	
 	private Long doctorId;
-	
-	private Long diagnosisId;
+
+    @NotNull(message = "Diagnosis id should not be null")
+    @Size(min = 1, message = "At least one diagnosis ID is required")
+    private List<Long> diagnosisIds;
 	
 	private LocalDateTime dateTime;
 	

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,7 +23,7 @@ public class Diagnosis {
 	@Column(nullable = false, unique = true)
 	private String name;
 	
-	@ManyToMany(mappedBy = "diagnosis")
-	private Set<Visit> visits = new HashSet<>();
+	@ManyToMany(mappedBy = "diagnoses")
+	private List<Visit> visits;
 }
 

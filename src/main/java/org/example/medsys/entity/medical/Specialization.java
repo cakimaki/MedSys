@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,7 +24,7 @@ public class Specialization {
 	private String name;
 	
 	@ManyToMany(mappedBy = "specializations")
-	private Set<Doctor> doctors = new HashSet<>();
+	private List<Doctor> doctors;
 
 }
 

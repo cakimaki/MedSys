@@ -23,7 +23,8 @@ public interface VisitService {
 	List<VisitResponse> getVisitsByPatientEgn(String patientEgn);
 	
 	List<VisitResponse> getVisitsByDoctorId(Long doctorId);
-	@Transactional
+
+    @Transactional
 	VisitResponse updateVisit(Long id, VisitRequest request);
 	
 	@Transactional

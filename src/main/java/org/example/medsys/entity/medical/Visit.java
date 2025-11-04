@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -34,7 +33,7 @@ public class Visit {
             joinColumns = @JoinColumn(name = "visit_id"),
             inverseJoinColumns = @JoinColumn(name = "diagnosis_id")
     )
-	private Set<Diagnosis> diagnosis = new HashSet<>();
+	private List<Diagnosis> diagnoses;
 	
 	@Column(nullable = false)
 	private LocalDateTime dateTime;

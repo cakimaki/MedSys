@@ -1,7 +1,6 @@
 package org.example.medsys.controller.auth;
 
-import org.example.medsys.dto.auth.LoginRequest;
-import org.example.medsys.dto.auth.RegisterRequest;
+import org.example.medsys.dto.auth.AuthRequest;
 import org.example.medsys.service.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,13 +24,13 @@ public class AuthController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+	public ResponseEntity<?> login(@RequestBody AuthRequest request) {
 		String token = authService.login(request.getEgn(), request.getPassword());
 		return ResponseEntity.ok(Map.of("token", token));
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+	public ResponseEntity<?> register(@RequestBody AuthRequest request) {
 		authService.register(request);
 		return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
 	}

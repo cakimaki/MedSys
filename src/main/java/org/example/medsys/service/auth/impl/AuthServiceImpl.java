@@ -1,7 +1,7 @@
 package org.example.medsys.service.auth.impl;
 
 import lombok.AllArgsConstructor;
-import org.example.medsys.dto.auth.RegisterRequest;
+import org.example.medsys.dto.auth.AuthRequest;
 import org.example.medsys.entity.auth.AppUser;
 import org.example.medsys.entity.auth.Role;
 import org.example.medsys.repository.auth.AppUserRepository;
@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 	
 	@Override
-	public void register(RegisterRequest request) {
+	public void register(AuthRequest request) {
 		// Check if the user already exists
 		if (appUserRepository.findByEgn(request.getEgn()).isPresent()) {
 			throw new RuntimeException("A user with this EGN already exists");

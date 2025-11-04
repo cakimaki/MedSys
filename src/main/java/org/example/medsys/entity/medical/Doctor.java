@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.medsys.entity.auth.AppUser;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,13 +33,13 @@ public class Doctor {
 			name = "doctor_specialization",
 			joinColumns = @JoinColumn(name = "doctor_id"),
 			inverseJoinColumns = @JoinColumn(name = "specialization_id"))
-	private List<Specialization> specializations = new ArrayList<>();
+	private List<Specialization> specializations;
 	
 	@OneToMany(mappedBy = "gp")
-	private Set<Patient> patients = new HashSet<>();
+	private List<Patient> patients;
 	
 	@OneToMany(mappedBy = "doctor")
-	private Set<Visit> visits = new HashSet<>();
+	private List<Visit> visits;
 
 
 }

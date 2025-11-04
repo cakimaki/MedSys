@@ -16,7 +16,9 @@ import org.example.medsys.service.medical.VisitService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +29,8 @@ public class VisitServiceImpl implements VisitService {
 	private final PatientRepository patientRepository;
 	private final DoctorRepository doctorRepository;
 	private final DiagnosisRepository diagnosisRepository;
-	
+
+
 	@Transactional
 	@Override
 	public VisitResponse createVisit(VisitRequest request) {
@@ -38,16 +41,24 @@ public class VisitServiceImpl implements VisitService {
 		// Fetch Doctor
 		Doctor doctor = doctorRepository.findById(request.getDoctorId())
 				.orElseThrow(() -> new IllegalArgumentException("Doctor not found with id: " + request.getDoctorId()));
-		
-		// Fetch Diagnosis (optional)
-		Diagnosis diagnosis = null;
-		if (request.getDiagnosisId() != null) {
-			diagnosis = diagnosisRepository.findById(request.getDiagnosisId())
-					.orElseThrow(() -> new IllegalArgumentException("Diagnosis not found with id: " + request.getDiagnosisId()));
-		}
-		
+
+        // Fetch diagnosis
+        List<Diagnosis> diagnoses = diagnosisRepository.findAllById(request.getDiagnosisIds());
+
+        if(diagnoses.size() != request.getDiagnosisIds().size()){
+            var foundIds = diagnoses
+                    .stream()
+                    .map(Diagnosis::getId)
+                    .toList();
+
+            var missing = new ArrayList<>(request.getDiagnosisIds())
+                    .removeAll(foundIds);
+
+            throw new NoSuchElementException("Unknown diagnosis id's: " + missing);
+        }
+
 		// Create Visit
-		return getVisitResponse(request, patient, doctor, diagnosis);
+		return createVisitAndReturnResponse(request, patient, doctor, diagnoses);
 	}
 	
 	@Transactional
@@ -62,24 +73,32 @@ public class VisitServiceImpl implements VisitService {
 				.orElseThrow(() -> new IllegalArgumentException("Doctor not found with EGN: " + doctorEgn));
 		
 		// Fetch Diagnosis (optional)
-		Diagnosis diagnosis = null;
-		if (request.getDiagnosisId() != null) {
-			diagnosis = diagnosisRepository.findById(request.getDiagnosisId())
-					.orElseThrow(() -> new IllegalArgumentException("Diagnosis not found with ID: " + request.getDiagnosisId()));
-		}
-		
+        List<Diagnosis> diagnoses = diagnosisRepository.findAllById(request.getDiagnosisIds());
+
+        if(diagnoses.size() != request.getDiagnosisIds().size()){
+            var foundIds = diagnoses
+                    .stream()
+                    .map(Diagnosis::getId)
+                    .toList();
+
+            var missing = new ArrayList<>(request.getDiagnosisIds())
+                    .removeAll(foundIds);
+
+            throw new NoSuchElementException("Unknown diagnosis id's: " + missing);
+
+        }
+
 		// Create Visit
-		return getVisitResponse(request, patient, doctor, diagnosis);
+		return createVisitAndReturnResponse(request, patient, doctor, diagnoses);
 	}
 	
-	private VisitResponse getVisitResponse(VisitRequest request, Patient patient, Doctor doctor, Diagnosis diagnosis) {
+	private VisitResponse createVisitAndReturnResponse(VisitRequest request, Patient patient, Doctor doctor, List<Diagnosis> diagnosis) {
 		Visit visit = new Visit();
 		visit.setPatient(patient);
 		visit.setDoctor(doctor);
-		visit.setDiagnosis(diagnosis);
+		visit.setDiagnoses(diagnosis);
 		if(request.getDateTime()==null){
 			visit.setDateTime(LocalDateTime.now());
-			
 		}else{
 			visit.setDateTime(request.getDateTime());
 		}
@@ -146,36 +165,38 @@ public class VisitServiceImpl implements VisitService {
 		// Fetch existing Visit
 		Visit visit = visitRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Visit not found with id: " + id));
-		
+
 		// Update fields
 		if (!visit.getPatient().getId().equals(request.getPatientId())) {
 			Patient patient = patientRepository.findById(request.getPatientId())
 					.orElseThrow(() -> new IllegalArgumentException("Patient not found with id: " + request.getPatientId()));
 			visit.setPatient(patient);
 		}
-		
+
 		if (!visit.getDoctor().getId().equals(request.getDoctorId())) {
 			Doctor doctor = doctorRepository.findById(request.getDoctorId())
 					.orElseThrow(() -> new IllegalArgumentException("Doctor not found with id: " + request.getDoctorId()));
 			visit.setDoctor(doctor);
 		}
-		
-		if (request.getDiagnosisId() != null &&
-				(visit.getDiagnosis() == null || !visit.getDiagnosis().getId().equals(request.getDiagnosisId()))) {
-			Diagnosis diagnosis = diagnosisRepository.findById(request.getDiagnosisId())
-					.orElseThrow(() -> new IllegalArgumentException("Diagnosis not found with id: " + request.getDiagnosisId()));
-			visit.setDiagnosis(diagnosis);
-		}
-		
+
+        //FIX
+//		if (request.getDiagnosisId() != null &&
+//				(visit.getDiagnosis() == null || !visit.getDiagnosis().getId().equals(request.getDiagnosisId()))) {
+//			Diagnosis diagnosis = diagnosisRepository.findById(request.getDiagnosisId())
+//					.orElseThrow(() -> new IllegalArgumentException("Diagnosis not found with id: " + request.getDiagnosisId()));
+//			visit.setDiagnosis(diagnosis);
+//		}
+
 		visit.setDateTime(request.getDateTime());
 		visit.setTreatment(request.getTreatment());
 		visit.setNotes(request.getNotes());
-		
+
 		Visit updatedVisit = visitRepository.save(visit);
-		
+
 		return mapToVisitResponse(updatedVisit);
 	}
-	
+
+
 	@Transactional
 	@Override
 	public VisitResponse updateVisitForDoctor(Long id, VisitRequest request, String doctorEgn) {
@@ -187,14 +208,14 @@ public class VisitServiceImpl implements VisitService {
 		if (!visit.getDoctor().getUser().getEgn().equals(doctorEgn)) {
 			throw new SecurityException("You do not have permission to update this visit.");
 		}
-		
+	//FIX
 		// Update optional fields
-		if (request.getDiagnosisId() != null && (visit.getDiagnosis() == null ||
-				!visit.getDiagnosis().getId().equals(request.getDiagnosisId()))) {
-			Diagnosis diagnosis = diagnosisRepository.findById(request.getDiagnosisId())
-					.orElseThrow(() -> new IllegalArgumentException("Diagnosis not found with ID: " + request.getDiagnosisId()));
-			visit.setDiagnosis(diagnosis);
-		}
+//		if (request.getDiagnosisId() != null && (visit.getDiagnosis() == null ||
+//				!visit.getDiagnosis().getId().equals(request.getDiagnosisId()))) {
+//			Diagnosis diagnosis = diagnosisRepository.findById(request.getDiagnosisId())
+//					.orElseThrow(() -> new IllegalArgumentException("Diagnosis not found with ID: " + request.getDiagnosisId()));
+//			visit.setDiagnosis(diagnosis);
+//		}
 		
 		visit.setDateTime(request.getDateTime() != null ? request.getDateTime() : visit.getDateTime());
 		visit.setTreatment(request.getTreatment());
@@ -231,13 +252,17 @@ public class VisitServiceImpl implements VisitService {
 		response.setId(visit.getId());
 		response.setPatientName(visit.getPatient().getName());
 		response.setDoctorName(visit.getDoctor().getName());
-		response.setDiagnosisName(visit.getDiagnosis() != null ? visit.getDiagnosis().getName() : null);
+        response.setDiagnosesNames(visit.getDiagnoses()
+                .stream()
+                .map(Diagnosis::getName)
+                .toList());
 		response.setDateTime(visit.getDateTime());
 		response.setTreatment(visit.getTreatment());
 		response.setNotes(visit.getNotes());
 		
 		// Map sick leave details if present
 		if (visit.getSickLeave() != null) {
+            response.setSickLeaveId(visit.getSickLeave().getId());
 			response.setSickLeaveStartDate(visit.getSickLeave().getStartDate());
 			response.setSickLeaveDurationDays(visit.getSickLeave().getDurationDays());
 		}

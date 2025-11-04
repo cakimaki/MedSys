@@ -6,6 +6,7 @@ import lombok.*;
 import org.example.medsys.entity.auth.AppUser;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,7 +31,7 @@ public class Patient {
 	private Doctor gp;
 	
 	@OneToMany(mappedBy = "patient")
-	private Set<Visit> visits = new HashSet<>();
+	private List<Visit> visits;
 
     //todo
     // How is this used?
@@ -38,5 +39,5 @@ public class Patient {
 	private boolean isInsured;
 	
 	@OneToMany(mappedBy = "patient",cascade = CascadeType.ALL)
-	private Set<InsurancePayment> insurancePayments = new HashSet<>();
+	private List<InsurancePayment> insurancePayments;
 }
