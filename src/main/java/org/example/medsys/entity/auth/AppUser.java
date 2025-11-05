@@ -36,7 +36,8 @@ public class AppUser {
 			inverseJoinColumns = @JoinColumn(name = "role_id")
 	)
 	private List<Role> roleList;
-	
+
+    //todo
 	// Fields for password reset functionality
 	private String resetToken;
 	
